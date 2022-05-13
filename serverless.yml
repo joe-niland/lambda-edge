@@ -35,20 +35,21 @@ functions:
     events:
       - cloudFront:
           eventType: viewer-request
+          pathPattern: /dump*
           origin:
             DomainName: www.truescope.com
+            # OriginPath: /
             CustomOriginConfig:
               OriginProtocolPolicy: match-viewer
-  # These events require the `serverless-plugin-cloudfront-lambda-edge` plugin
   # originRequest:
   #   handler: handler.originRequest
-  #   timeout: 30
+  #   timeout: 5
   #   lambdaAtEdge:
   #     distribution: lambdaEdgeExperimentDistribution
   #     eventType: origin-request
   # originResponse:
   #   handler: handler.originResponse
-  #   timeout: 30
+  #   timeout: 5
   #   lambdaAtEdge:
   #     distribution: lambdaEdgeExperimentDistribution
   #     eventType: origin-response
