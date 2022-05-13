@@ -1,0 +1,88 @@
+service: lambda-edge-poc
+
+custom:
+  os:
+    mac:
+      dockerizePip: non-linux
+    linux:
+      dockerizePip: false
+
+  pythonRequirements:
+    dockerizePip: ${self:custom.os.${opt:os, "mac"}.dockerizePip}
+
+package:
+  individually: true
+  patterns:
+    - "!README.md"
+    - "!.git/**"
+    - "!package*.json"
+    - "!venv/**"
+    - "!node_modules/**"
+    - '!\*.egg-info/**'
+    - '!\*.dist-info/**'
+    - "!tests/**"
+    - "!payloads/**"
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-east-1
+
+functions:
+  viewerRequest:
+    handler: handler.viewerRequest
+    timeout: 5
+    events:
+      - cloudFront:
+          eventType: viewer-request
+          origin:
+            DomainName: www.truescope.com
+            CustomOriginConfig:
+              OriginProtocolPolicy: match-viewer
+  # These events require the `serverless-plugin-cloudfront-lambda-edge` plugin
+  # originRequest:
+  #   handler: handler.originRequest
+  #   timeout: 30
+  #   lambdaAtEdge:
+  #     distribution: lambdaEdgeExperimentDistribution
+  #     eventType: origin-request
+  # originResponse:
+  #   handler: handler.originResponse
+  #   timeout: 30
+  #   lambdaAtEdge:
+  #     distribution: lambdaEdgeExperimentDistribution
+  #     eventType: origin-response
+  # viewerResponse:
+  #   handler: handler.viewerResponse
+  #   timeout: 5
+  #   lambdaAtEdge:
+  #     distribution: lambdaEdgeExperimentDistribution
+  #     eventType: viewer-response
+# resources:
+#   Resources:
+#     lambdaEdgeExperimentDistribution:
+#       Type: AWS::CloudFront::Distribution
+#       Properties:
+#         DistributionConfig:
+#           Origins:
+#             - Id: DefaultOrigin
+#               DomainName: example.com
+#               CustomOriginConfig:
+#                 HTTPPort: "80"
+#                 HTTPSPort: "443"
+#                 OriginProtocolPolicy: http-only
+#           Enabled: true
+#           Comment: Lambda Edge Experiment
+#           DefaultCacheBehavior:
+#             TargetOriginId: DefaultOrigin
+#             ViewerProtocolPolicy: allow-all
+#             DefaultTTL: 300
+#             MinTTL: 300
+#             MaxTTL: 300
+#             Compress: true
+#             ForwardedValues:
+#               QueryString: true
+#               Cookies:
+#                 Forward: none
+#           PriceClass: PriceClass_200
+#           HttpVersion: http2
