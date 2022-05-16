@@ -28,6 +28,13 @@ provider:
   runtime: python3.8
   region: us-east-1
 
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:*"
+      Resource:
+        - "*"
+
 functions:
   viewerRequest:
     handler: handler.viewerRequest
@@ -35,7 +42,7 @@ functions:
     events:
       - cloudFront:
           eventType: viewer-request
-          pathPattern: /dump*
+          pathPattern: /view*
           origin:
             DomainName: www.truescope.com
             # OriginPath: /
@@ -59,6 +66,35 @@ functions:
   #   lambdaAtEdge:
   #     distribution: lambdaEdgeExperimentDistribution
   #     eventType: viewer-response
+
+# resources: # CloudFormation template syntax from here on.
+#   Resources:
+#     lambdaEdgeRole:
+#       Type: AWS::IAM::Role
+#       Properties:
+#         RoleName: lambda-edge-test-role
+#         AssumeRolePolicyDocument:
+#           Version: "2012-10-17"
+#           Statement:
+#             - Effect: "Allow"
+#               Principal:
+#                 Service:
+#                   - edgelambda.amazonaws.com
+#                   - lambda.amazonaws.com
+#               Action: sts:AssumeRole
+#         Policies:
+#           - PolicyName: lambda-edge-policy
+#             PolicyDocument:
+#               Version: "2012-10-17"
+#               Statement:
+#                 - Effect: "Allow"
+#                   Action:
+#                     - "dynamodb:*"
+#                     - "dynamodb:*"
+#                     - "cloudfront:*"
+#                     - "lambda:*"
+#                     - "logs:*"
+#                   Resource: "*"
 # resources:
 #   Resources:
 #     lambdaEdgeExperimentDistribution:
