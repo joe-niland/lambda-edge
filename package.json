@@ -1,0 +1,22 @@
+{
+  "name": "lambda-edge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joe-niland/lambda-edge.git"
+  },
+  "author": "https://github.com/joe-niland",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joe-niland/lambda-edge/issues"
+  },
+  "homepage": "https://github.com/joe-niland/lambda-edge#readme",
+  "devDependencies": {
+    "serverless-python-requirements": "^5.4.0"
+  }
+}
