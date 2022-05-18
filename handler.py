@@ -1,13 +1,13 @@
 import json, boto3
 from botocore.exceptions import ClientError
 
-def viewerRequest(event, context):
+def edgeRequest(event, context):
     request = event["Records"][0]["cf"]["request"]
     headers = request["headers"]
     print(request)
     print(headers)
 
-    if request["uri"] == "/view-auth-table":
+    if request["uri"] == "/origin-auth-table":
         auth_record = {'auth_id': 'empty'}
 
         auth_record = get_item_from_dynamo('truescope.global.user_workspace_data',
