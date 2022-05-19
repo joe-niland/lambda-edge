@@ -1,4 +1,4 @@
-service: lambda-edge-poc
+service: edge-poc
 
 # plugins:
 # - serverless-python-requirements
@@ -39,20 +39,22 @@ provider:
         - "*"
 
 functions:
-  # viewerRequest:
-  #   handler: handler.viewerRequest
-  #   timeout: 5
-  #   events:
-  #     - cloudFront:
-  #         eventType: viewer-request
-  #         pathPattern: /view*
-  #         origin:
-  #           DomainName: www.truescope.com
-  #           # OriginPath: /
-  #           CustomOriginConfig:
-  #             OriginProtocolPolicy: match-viewer
+  viewerRequest:
+    name: viewerRequestPOC
+    handler: handler.viewerRequest
+    timeout: 5
+    events:
+      - cloudFront:
+          eventType: viewer-request
+          pathPattern: /view*
+          origin:
+            DomainName: www.truescope.com
+            # OriginPath: /
+            CustomOriginConfig:
+              OriginProtocolPolicy: match-viewer
   originRequest:
-    handler: handler.edgeRequest
+    name: originRequestPOC
+    handler: handler.originRequest
     timeout: 30
     events:
       - cloudFront:
